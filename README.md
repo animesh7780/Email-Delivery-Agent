@@ -43,7 +43,7 @@ Email Delivery Agent/
 │   ├── config.py            # Configuration settings
 │   ├── database.py          # Database models & setup
 │   ├── models.py            # Pydantic schemas
-│   ├── llm_service.py       # OpenAI integration
+│   ├── llm_service.py       # GoogleAPI integration
 │   └── seed_data.py         # Sample data generator
 ├── frontend/
 │   ├── public/
@@ -70,20 +70,13 @@ Email Delivery Agent/
 
 - Python 3.8 or higher
 - Node.js 14 or higher
-- OpenAI API key ([Get one here](https://platform.openai.com/api-keys))
+- Google API Key
 
 ### Backend Setup (Gemini)
 
 1. **Clone the repository**
-   ```bash
-   cd "d:\College\Company-Assignments\OcenaAI\Email Delivery Agent"
-   ```
 
 2. **Create virtual environment**
-   ```bash
-   python -m venv venv
-   venv\Scripts\activate
-   ```
 
 3. **Install Python dependencies**
    ```bash
@@ -97,8 +90,8 @@ Email Delivery Agent/
    
    Edit `.env` and add your Gemini API key and chosen model:
    ```dotenv
-   GEMINI_API_KEY=your_gemini_api_key_here
-   GEMINI_MODEL=gemini-1.5-flash
+   GEMINI_API_KEY=gemini_api_key_here
+   GEMINI_MODEL=gemini-2.5-flash
    DATABASE_URL=sqlite:///./email_agent.db
    HOST=0.0.0.0
    PORT=8000
