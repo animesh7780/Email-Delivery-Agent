@@ -1,8 +1,8 @@
-# 📧 Email Productivity Agent
+# Email Productivity Agent
 
 An intelligent, prompt-driven Email Productivity Agent that automates email management using Large Language Models (LLMs). This system categorizes emails, extracts action items, generates draft replies, and provides an interactive chat interface for inbox management.
 
-## 🌟 Features
+## Features
 
 - **AI-Powered Email Categorization**: Automatically categorizes emails (Work, Personal, Promotional, Important, etc.)
 - **Smart Action Item Extraction**: Identifies tasks, deadlines, and priorities from email content
@@ -12,7 +12,7 @@ An intelligent, prompt-driven Email Productivity Agent that automates email mana
 - **Real-time Statistics**: Dashboard showing inbox metrics and insights
 - **Mock Data**: 20 pre-loaded sample emails for immediate testing
 
-## 🏗️ Architecture
+## Architecture
 
 ### Tech Stack
 
@@ -20,7 +20,7 @@ An intelligent, prompt-driven Email Productivity Agent that automates email mana
 - FastAPI (Python web framework)
 - SQLAlchemy (ORM)
 - SQLite (Database)
-- OpenAI API (LLM integration)
+- Google Gemini via `google-generativeai` (LLM integration)
 - Pydantic (Data validation)
 
 **Frontend:**
@@ -29,7 +29,7 @@ An intelligent, prompt-driven Email Productivity Agent that automates email mana
 - CSS3 (Styling)
 
 **AI/LLM:**
-- OpenAI GPT-3.5/GPT-4
+- Google Gemini (via `google-generativeai`)
 - Custom prompt templates
 - JSON-structured responses
 
@@ -64,7 +64,7 @@ Email Delivery Agent/
 └── README.md
 ```
 
-## 🚀 Setup Instructions
+## Setup Instructions
 
 ### Prerequisites
 
@@ -72,7 +72,7 @@ Email Delivery Agent/
 - Node.js 14 or higher
 - OpenAI API key ([Get one here](https://platform.openai.com/api-keys))
 
-### Backend Setup
+### Backend Setup (Gemini)
 
 1. **Clone the repository**
    ```bash
@@ -95,27 +95,38 @@ Email Delivery Agent/
    copy .env.example .env
    ```
    
-   Edit `.env` and add your OpenAI API key:
-   ```
-   OPENAI_API_KEY=your_actual_api_key_here
-   OPENAI_MODEL=gpt-3.5-turbo
+   Edit `.env` and add your Gemini API key and chosen model:
+   ```dotenv
+   GEMINI_API_KEY=your_gemini_api_key_here
+   GEMINI_MODEL=gemini-1.5-flash
    DATABASE_URL=sqlite:///./email_agent.db
    HOST=0.0.0.0
    PORT=8000
    ```
 
-5. **Initialize database and seed sample data**
+5. **Start the backend server (recommended)**
+
+   A convenience script `start-backend.bat` will initialize the database **only if** the `email_agent.db` file is missing (prevents duplicate seeding) and then start the server:
    ```bash
-   python backend\seed_data.py
+   start-backend.bat
    ```
 
-6. **Start the backend server**
-   ```bash
-   python backend\main.py
-   ```
-   
    The API will be available at `http://localhost:8000`
    API documentation at `http://localhost:8000/docs`
+
+6. **Seed / Cleanup (optional)**
+
+   - If you need to re-seed from scratch, delete the DB then start the backend:
+     ```bash
+     del email_agent.db
+     start-backend.bat
+     ```
+
+   - To remove duplicates (keeps other records), run the cleanup script:
+     ```bash
+     cd backend
+     python cleanup_duplicates.py
+     ```
 
 ### Frontend Setup
 
@@ -136,18 +147,18 @@ Email Delivery Agent/
    
    The application will open at `http://localhost:3000`
 
-## 📊 Sample Data
+## Sample Data
 
 The system includes 20 pre-loaded sample emails covering various scenarios:
 
-- ✅ Work-related emails (project deadlines, meetings, code reviews)
-- 📧 Personal emails (family, friends)
-- 🎯 Important notifications (security alerts, HR communications)
-- 📣 Promotional emails (marketing, offers)
-- 🌐 Social notifications (LinkedIn, GitHub)
-- 📰 Newsletters (tech news, updates)
+- Work-related emails (project deadlines, meetings, code reviews)
+- Personal emails (family, friends)
+- Important notifications (security alerts, HR communications)
+- Promotional emails (marketing, offers)
+- Social notifications (LinkedIn, GitHub)
+- Newsletters (tech news, updates)
 
-## 🎯 Default Prompt Templates
+## Default Prompt Templates
 
 ### 1. Email Categorization
 Analyzes email content and assigns:
@@ -167,7 +178,7 @@ Creates professional email responses with:
 - Well-structured body
 - Key points addressed
 
-## 🎮 Usage Guide
+## Usage Guide
 
 ### Managing Emails
 
@@ -194,7 +205,7 @@ Creates professional email responses with:
 4. Click "Create New Prompt" to add custom templates
 5. Toggle "Active" to enable/disable prompts
 
-## 🔌 API Endpoints
+## API Endpoints
 
 ### Emails
 - `GET /api/emails` - List all emails (with optional category filter)
@@ -218,51 +229,23 @@ Creates professional email responses with:
 - `POST /api/chat` - Send message to AI assistant
 - `GET /api/stats` - Get inbox statistics
 
-## 🎥 Demo Video Guide
-
-When creating your demo video, showcase:
-
-1. **Initial Setup** (1 min)
-   - Backend and frontend running
-   - Database with sample emails
-
-2. **Email Management** (2 min)
-   - Browse inbox
-   - Filter by categories
-   - View email details
-   - Process emails with AI
-
-3. **AI Features** (2 min)
-   - Email categorization
-   - Action item extraction
-   - Draft generation
-
-4. **Prompt Configuration** (1 min)
-   - View default prompts
-   - Edit prompt template
-   - Create custom prompt
-
-5. **Chat Interface** (1 min)
-   - Ask questions about inbox
-   - Get AI-powered insights
-
-## 🛠️ Development
+## Development
 
 ### Adding More Sample Emails
 
-Edit `backend/seed_data.py` and add entries to the `sample_emails` list:
+Edit `backend/seed_data.py` and add entries to the `sample_emails` list, for example:
 
 ```python
 {
-    "sender": "user@example.com",
-    "sender_name": "John Doe",
-    "recipient": "you@company.com",
-    "subject": "Your Subject",
-    "body": "Email content here..."
+   "sender": "user@example.com",
+   "sender_name": "John Doe",
+   "recipient": "you@company.com",
+   "subject": "Your Subject",
+   "body": "Email content here..."
 }
 ```
 
-Run: `python backend\seed_data.py`
+Because the project now seeds only when the DB file is absent, to re-seed you must delete the DB and re-run the backend (see seeding section).
 
 ### Customizing AI Behavior
 
@@ -271,6 +254,8 @@ Modify prompt templates in the UI or directly in the database to change:
 - Task extraction patterns
 - Reply generation style
 
+Note: The backend LLM integration uses Google Gemini via the `google-generativeai` package. You can switch `GEMINI_MODEL` in your `.env` to a different supported model.
+
 ## 🔒 Security Notes
 
 - Never commit `.env` file with real API keys
@@ -278,30 +263,7 @@ Modify prompt templates in the UI or directly in the database to change:
 - Keep your OpenAI API key secure
 - This is a development/demo application - add authentication for production use
 
-## 🐛 Troubleshooting
-
-### Backend Issues
-
-**ImportError: No module named 'fastapi'**
-- Solution: Activate virtual environment and run `pip install -r requirements.txt`
-
-**OpenAI API Error**
-- Solution: Check your API key in `.env` file
-- Ensure you have credits in your OpenAI account
-
-**Database Error**
-- Solution: Delete `email_agent.db` and run `python backend\seed_data.py` again
-
-### Frontend Issues
-
-**Port 3000 already in use**
-- Solution: Kill the process or use a different port: `set PORT=3001 && npm start`
-
-**API Connection Error**
-- Solution: Ensure backend is running on port 8000
-- Check `proxy` setting in `frontend/package.json`
-
-## 📝 Key Implementation Details
+## Key Implementation Details
 
 ### Prompt-Driven Architecture
 
@@ -318,39 +280,3 @@ All AI operations are driven by customizable prompts stored in the database:
 Email Received → User Triggers Processing → System Retrieves Prompt Template
 → LLM Analyzes Email → Structured Response → Database Update → UI Display
 ```
-
-### Draft Generation
-
-Generated drafts are **stored but not sent automatically**, ensuring user review and control.
-
-## 🎯 Evaluation Criteria Met
-
-✅ **Functionality**: Full CRUD operations, AI processing, chat interface  
-✅ **Prompt-Driven**: All AI operations use customizable prompts  
-✅ **Code Quality**: Clean structure, separation of concerns, error handling  
-✅ **User Experience**: Intuitive UI, real-time feedback, responsive design  
-✅ **Robustness**: Error handling, validation, graceful degradation  
-
-## 🤝 Contributing
-
-This is a demo project for evaluation purposes. For production use, consider:
-- Adding user authentication
-- Implementing real email integration (IMAP/SMTP)
-- Adding email scheduling
-- Implementing email threading
-- Adding attachment support
-
-## 📄 License
-
-This project is created for educational and evaluation purposes.
-
-## 👨‍💻 Support
-
-For issues or questions:
-1. Check the troubleshooting section
-2. Review API documentation at `http://localhost:8000/docs`
-3. Check console logs for detailed error messages
-
----
-
-**Built with ❤️ using FastAPI, React, and OpenAI**
