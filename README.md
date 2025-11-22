@@ -33,7 +33,7 @@ An intelligent, prompt-driven Email Productivity Agent that automates email mana
 - Custom prompt templates
 - JSON-structured responses
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 Email Delivery Agent/
@@ -255,13 +255,6 @@ Modify prompt templates in the UI or directly in the database to change:
 - Reply generation style
 
 Note: The backend LLM integration uses Google Gemini via the `google-generativeai` package. You can switch `GEMINI_MODEL` in your `.env` to a different supported model.
-
-## 🔒 Security Notes
-
-- Never commit `.env` file with real API keys
-- The `.env.example` is provided as a template
-- Keep your OpenAI API key secure
-- This is a development/demo application - add authentication for production use
 
 ## Key Implementation Details
 
